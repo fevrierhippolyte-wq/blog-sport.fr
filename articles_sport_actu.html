@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MonBlog - Actu Sport</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#0d0d0d;color:#e8e6df;min-height:100vh}
+a{color:inherit;text-decoration:none}
+header{background:#0d0d0d;border-bottom:1px solid #222;padding:0 2rem;position:sticky;top:0;z-index:100}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1100px;margin:0 auto}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#f0ff44}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:.9rem;color:#aaa;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:#f0ff44}
+
+/* INDEX */
+.index-hero{max-width:1100px;margin:2.5rem auto 0;padding:0 2rem}
+.index-hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;margin-bottom:.5rem}
+.index-hero p{color:#666;font-size:.95rem;margin-bottom:2rem}
+.articles-list{display:flex;flex-direction:column;gap:1rem}
+.art-row{background:#161616;border:1px solid #222;border-radius:12px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.5rem;cursor:pointer;transition:border-color .2s,transform .2s}
+.art-row:hover{border-color:#f0ff44;transform:translateX(4px)}
+.art-icon{font-size:2.2rem;flex-shrink:0;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:10px}
+.art-icon.f1{background:#1a0a0a}
+.art-icon.foot{background:#0a1a0a}
+.art-icon.velo{background:#0a0a1a}
+.art-icon.tennis{background:#1a180a}
+.art-icon.rugby{background:#1a0a14}
+.art-info{flex:1}
+.art-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#f0ff44;margin-bottom:.3rem}
+.art-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+.art-meta{font-size:.75rem;color:#555}
+.art-arrow{color:#333;font-size:1.2rem;flex-shrink:0;transition:color .2s}
+.art-row:hover .art-arrow{color:#f0ff44}
+
+/* ARTICLE PAGE */
+.article-page{display:none;max-width:1100px;margin:2rem auto;padding:0 2rem}
+.back-btn{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:#666;margin-bottom:1.5rem;cursor:pointer;transition:color .2s}
+.back-btn:hover{color:#f0ff44}
+.article-wrapper{display:grid;grid-template-columns:1fr 260px;gap:2.5rem}
+.tag{display:inline-block;background:#f0ff44;color:#0d0d0d;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;margin-bottom:1rem}
+.article-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;line-height:1.15;color:#fff;margin-bottom:1rem}
+.article-intro{font-size:1rem;color:#aaa;line-height:1.75;margin-bottom:1.5rem;border-left:3px solid #f0ff44;padding-left:1rem;font-style:italic}
+.article-meta{display:flex;align-items:center;gap:1rem;font-size:.8rem;color:#555;padding-bottom:1.5rem;border-bottom:1px solid #1a1a1a;margin-bottom:2rem}
+.author-dot{width:28px;height:28px;background:#f0ff44;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#0d0d0d}
+.hero-img-article{width:100%;aspect-ratio:16/7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.hero-img-article.f1{background:linear-gradient(135deg,#1a0505,#3a0a0a,#1a1a00)}
+.hero-img-article.foot{background:linear-gradient(135deg,#051a05,#0a3a0a,#001a1a)}
+.hero-img-article.velo{background:linear-gradient(135deg,#05051a,#0a0a3a,#001a10)}
+.hero-img-article.tennis{background:linear-gradient(135deg,#1a1505,#3a2a0a,#1a0a00)}
+.hero-img-article.rugby{background:linear-gradient(135deg,#1a0510,#3a0a20,#0a001a)}
+.pub-slot{background:#161616;border:1px dashed #2a2a2a;border-radius:8px;padding:1rem 2rem;text-align:center;color:#444;font-size:.8rem;margin:2rem 0}
+.pub-slot span{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;color:#333}
+.content h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;margin:2.5rem 0 1rem;padding-left:.75rem;border-left:3px solid #f0ff44}
+.content h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:#ddd;margin:1.5rem 0 .75rem}
+.content p{font-size:.95rem;color:#bbb;line-height:1.85;margin-bottom:1.2rem}
+.content strong{color:#fff;font-weight:500}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+.stat-card{background:#161616;border:1px solid #222;border-radius:12px;padding:1.2rem;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#f0ff44}
+.stat-label{font-size:.7rem;color:#666;margin-top:.3rem}
+.tip-box{background:#161616;border:1px solid #2a2a2a;border-left:3px solid #f0ff44;border-radius:8px;padding:1.2rem 1.5rem;margin:1.5rem 0}
+.tip-box .tip-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#f0ff44;margin-bottom:.5rem}
+.tip-box p{color:#aaa;font-size:.9rem;margin:0}
+.ranking{display:flex;flex-direction:column;gap:.6rem;margin:1.5rem 0}
+.rank-row{display:flex;align-items:center;gap:1rem;background:#161616;border:1px solid #222;border-radius:8px;padding:.75rem 1rem}
+.rank-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f0ff44;width:28px;flex-shrink:0}
+.rank-name{font-weight:500;color:#fff;flex:1}
+.rank-detail{font-size:.8rem;color:#666}
+.pub-side{background:#161616;border:1px dashed #2a2a2a;border-radius:8px;padding:1rem;text-align:center;color:#444;font-size:.75rem;height:fit-content;position:sticky;top:80px}
+.pub-side span{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;color:#333}
+.pub-side-inner{width:100%;min-height:280px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+footer{border-top:1px solid #1a1a1a;padding:2rem;text-align:center;font-size:.8rem;color:#444;margin-top:2rem}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo">⚡ MonBlog</div>
+    <div class="nav-links">
+      <a href="#">Accueil</a>
+      <a href="#" class="active">Sport</a>
+      <a href="#">Gaming</a>
+      <a href="#">Crypto</a>
+    </div>
+  </nav>
+</header>
+
+<!-- INDEX DES ARTICLES -->
+<div class="index-hero" id="index-page">
+  <h1>Actu Sport 2025</h1>
+  <p>Les 5 articles à lire cette semaine sur la F1, le foot, le cyclisme, le tennis et le rugby.</p>
+  <div class="articles-list">
+    <div class="art-row" onclick="showArticle('f1')">
+      <div class="art-icon f1">🏎️</div>
+      <div class="art-info">
+        <div class="art-tag">Formule 1</div>
+        <div class="art-title">F1 2025 : Max Verstappen peut-il décrocher un 5ème titre mondial ?</div>
+        <div class="art-meta">8 juin 2025 · 5 min de lecture</div>
+      </div>
+      <div class="art-arrow">→</div>
+    </div>
+    <div class="art-row" onclick="showArticle('foot')">
+      <div class="art-icon foot">⚽</div>
+      <div class="art-info">
+        <div class="art-tag">Football</div>
+        <div class="art-title">Ligue des Champions 2025 : bilan et surprises de la saison</div>
+        <div class="art-meta">7 juin 2025 · 6 min de lecture</div>
+      </div>
+      <div class="art-arrow">→</div>
+    </div>
+    <div class="art-row" onclick="showArticle('velo')">
+      <div class="art-icon velo">🚴</div>
+      <div class="art-info">
+        <div class="art-tag">Cyclisme</div>
+        <div class="art-title">Tour de France 2025 : les favoris et les outsiders à surveiller</div>
+        <div class="art-meta">6 juin 2025 · 5 min de lecture</div>
+      </div>
+      <div class="art-arrow">→</div>
+    </div>
+    <div class="art-row" onclick="showArticle('tennis')">
+      <div class="art-icon tennis">🎾</div>
+      <div class="art-info">
+        <div class="art-tag">Tennis</div>
+        <div class="art-title">Roland-Garros 2025 : retour sur le tournoi le plus imprévisible</div>
+        <div class="art-meta">5 juin 2025 · 4 min de lecture</div>
+      </div>
+      <div class="art-arrow">→</div>
+    </div>
+    <div class="art-row" onclick="showArticle('rugby')">
+      <div class="art-icon rugby">🏉</div>
+      <div class="art-info">
+        <div class="art-tag">Rugby</div>
+        <div class="art-title">Top 14 : qui va soulever le Brennus cette saison ?</div>
+        <div class="art-meta">4 juin 2025 · 4 min de lecture</div>
+      </div>
+      <div class="art-arrow">→</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGES ARTICLES -->
+<div class="article-page" id="page-f1">
+  <div class="back-btn" onclick="goBack()">← Retour aux articles</div>
+  <div class="article-wrapper">
+    <main>
+      <div class="tag">🏎️ Formule 1</div>
+      <h1 class="article-title">F1 2025 : Max Verstappen peut-il décrocher un 5ème titre mondial ?</h1>
+      <p class="article-intro">Après quatre titres consécutifs, le Néerlandais de Red Bull aborde la saison 2025 sous pression. McLaren et Ferrari ont considérablement réduit l'écart. Analyse.</p>
+      <div class="article-meta"><div class="author-dot">H</div><span>Par <strong style="color:#ccc">Hippolyte</strong></span><span>·</span><span>8 juin 2025</span><span>·</span><span>5 min</span></div>
+      <div class="hero-img-article f1">🏎️🏁</div>
+      <div class="pub-slot"><span>Google AdSense — 728×90</span>Bannière publicitaire</div>
+      <div class="content">
+        <p>La saison 2025 de Formule 1 s'annonce comme l'une des plus disputées depuis des années. Si Max Verstappen reste le favori logique, la domination de Red Bull semble bien plus fragile qu'en 2023.</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Titres mondiaux Verstappen</div></div>
+          <div class="stat-card"><div class="stat-num">24</div><div class="stat-label">Courses au calendrier 2025</div></div>
+          <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Écuries candidates au titre</div></div>
+        </div>
+        <h2>Red Bull en difficulté</h2>
+        <p>Depuis la fin de la saison 2024, Red Bull a perdu son avantage aérodynamique. Les évolutions apportées sur la RB21 n'ont pas encore convaincu. <strong>Adrian Newey ayant quitté l'écurie</strong>, le génie technique qui a propulsé l'équipe au sommet manque cruellement.</p>
+        <div class="pub-slot"><span>Google AdSense — 336×280</span>Rectangle moyen</div>
+        <h2>McLaren et Ferrari à l'attaque</h2>
+        <p>Lando Norris sur McLaren est probablement le principal danger pour Verstappen. Après sa première victoire en 2024, le Britannique arrive en 2025 avec une voiture encore plus compétitive. Du côté de Ferrari, Charles Leclerc espère enfin concrétiser son potentiel avec une SF-25 révisée.</p>
+        <h2>Notre pronostic</h2>
+        <div class="ranking">
+          <div class="rank-row"><div class="rank-num">1</div><div class="rank-name">Max Verstappen</div><div class="rank-detail">Red Bull — Favori</div></div>
+          <div class="rank-row"><div class="rank-num">2</div><div class="rank-name">Lando Norris</div><div class="rank-detail">McLaren — Challenger</div></div>
+          <div class="rank-row"><div class="rank-num">3</div><div class="rank-name">Charles Leclerc</div><div class="rank-detail">Ferrari — Outsider</div></div>
+        </div>
+        <div class="tip-box"><div class="tip-title">⚡ Notre avis</div><p>Verstappen reste le plus complet, mais 2025 pourrait être la saison où Norris brise enfin sa domination. Le titre se jouera aux détails.</p></div>
+      </div>
+    </main>
+    <aside><div class="pub-side"><span>Google AdSense</span><div class="pub-side-inner"><div style="font-size:1.5rem">📢</div><div>160×600</div><div>Skyscraper</div></div></div></aside>
+  </div>
+</div>
+
+<div class="article-page" id="page-foot">
+  <div class="back-btn" onclick="goBack()">← Retour aux articles</div>
+  <div class="article-wrapper">
+    <main>
+      <div class="tag">⚽ Football</div>
+      <h1 class="article-title">Ligue des Champions 2025 : bilan et surprises de la saison</h1>
+      <p class="article-intro">La nouvelle formule de la Champions League a tenu ses promesses. Plus de matchs, plus de surprises, et des clubs inattendus qui ont bousculé l'ordre établi.</p>
+      <div class="article-meta"><div class="author-dot">H</div><span>Par <strong style="color:#ccc">Hippolyte</strong></span><span>·</span><span>7 juin 2025</span><span>·</span><span>6 min</span></div>
+      <div class="hero-img-article foot">⚽🏆</div>
+      <div class="pub-slot"><span>Google AdSense — 728×90</span>Bannière publicitaire</div>
+      <div class="content">
+        <p>Avec sa nouvelle formule à 36 clubs introduite en 2024, la Ligue des Champions offre désormais une phase de groupes élargie qui donne leur chance à des équipes moins habituées à ce stade de la compétition.</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">36</div><div class="stat-label">Clubs qualifiés</div></div>
+          <div class="stat-card"><div class="stat-num">189</div><div class="stat-label">Matchs au total</div></div>
+          <div class="stat-card"><div class="stat-num">+40%</div><div class="stat-label">D'audiences vs 2023</div></div>
+        </div>
+        <h2>Les grandes surprises</h2>
+        <p>La saison 2024-2025 a été marquée par l'élimination précoce de plusieurs cadors. Le Bayern Munich et Manchester City, habitués des demi-finales, ont tous les deux été sortis dès les huitièmes de finale. À l'inverse, <strong>Bayer Leverkusen et l'Atlético Madrid</strong> ont créé l'événement en atteignant les derniers carrés.</p>
+        <div class="pub-slot"><span>Google AdSense — 336×280</span>Rectangle moyen</div>
+        <h2>Le Real Madrid, toujours là</h2>
+        <p>Comme souvent, le Real Madrid a su se sublimer dans les grands rendez-vous. Malgré une saison en Liga décevante, les Madrilènes ont montré un visage radicalement différent en Coupe d'Europe, portés par Kylian Mbappé en grande forme.</p>
+        <h2>Top 4 de la saison</h2>
+        <div class="ranking">
+          <div class="rank-row"><div class="rank-num">1</div><div class="rank-name">Real Madrid</div><div class="rank-detail">Espagne — Vainqueur</div></div>
+          <div class="rank-row"><div class="rank-num">2</div><div class="rank-name">Bayer Leverkusen</div><div class="rank-detail">Allemagne — Finaliste</div></div>
+          <div class="rank-row"><div class="rank-num">3</div><div class="rank-name">Atlético Madrid</div><div class="rank-detail">Espagne — Demi-finale</div></div>
+          <div class="rank-row"><div class="rank-num">4</div><div class="rank-name">PSG</div><div class="rank-detail">France — Demi-finale</div></div>
+        </div>
+        <div class="tip-box"><div class="tip-title">📊 Chiffre clé</div><p>Kylian Mbappé a inscrit 11 buts en Champions League cette saison, meilleur buteur de la compétition pour la première fois de sa carrière.</p></div>
+      </div>
+    </main>
+    <aside><div class="pub-side"><span>Google AdSense</span><div class="pub-side-inner"><div style="font-size:1.5rem">📢</div><div>160×600</div><div>Skyscraper</div></div></div></aside>
+  </div>
+</div>
+
+<div class="article-page" id="page-velo">
+  <div class="back-btn" onclick="goBack()">← Retour aux articles</div>
+  <div class="article-wrapper">
+    <main>
+      <div class="tag">🚴 Cyclisme</div>
+      <h1 class="article-title">Tour de France 2025 : les favoris et les outsiders à surveiller</h1>
+      <p class="article-intro">Le Tour de France 2025 s'élance début juillet avec un parcours particulièrement montagneux. On fait le point sur les coureurs qui peuvent prétendre au maillot jaune final.</p>
+      <div class="article-meta"><div class="author-dot">H</div><span>Par <strong style="color:#ccc">Hippolyte</strong></span><span>·</span><span>6 juin 2025</span><span>·</span><span>5 min</span></div>
+      <div class="hero-img-article velo">🚴🏔️</div>
+      <div class="pub-slot"><span>Google AdSense — 728×90</span>Bannière publicitaire</div>
+      <div class="content">
+        <p>Le Tour de France reste la course cycliste la plus regardée au monde. En 2025, le parcours inclut plusieurs étapes dans les Alpes et les Pyrénées, avec un chrono décisif dans la dernière semaine.</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">21</div><div class="stat-label">Étapes au programme</div></div>
+          <div class="stat-card"><div class="stat-num">3400</div><div class="stat-label">Kilomètres au total</div></div>
+          <div class="stat-card"><div class="stat-num">52 000</div><div class="stat-label">Mètres de dénivelé</div></div>
+        </div>
+        <h2>Les grands favoris</h2>
+        <p>Tadej Pogacar (UAE Emirates) arrive en grand favori après sa victoire au Giro 2025. Le Slovène semble au sommet de son art et voudra réaliser le doublé Giro-Tour, un exploit rare dans l'histoire du cyclisme. <strong>Jonas Vingegaard</strong>, double vainqueur sortant, revient de blessure et reste une menace réelle.</p>
+        <div class="pub-slot"><span>Google AdSense — 336×280</span>Rectangle moyen</div>
+        <h2>Les Français peuvent-ils gagner ?</h2>
+        <p>La France attend un vainqueur du Tour depuis Bernard Hinault en 1985. Cette année, <strong>Romain Bardet</strong> et <strong>David Gaudu</strong> espèrent jouer un rôle dans la première semaine, mais une victoire finale semble encore hors de portée face aux cadors slovènes et danois.</p>
+        <h2>Notre podium prévu</h2>
+        <div class="ranking">
+          <div class="rank-row"><div class="rank-num">1</div><div class="rank-name">Tadej Pogacar</div><div class="rank-detail">UAE Emirates — Grand favori</div></div>
+          <div class="rank-row"><div class="rank-num">2</div><div class="rank-name">Jonas Vingegaard</div><div class="rank-detail">Visma — Retour attendu</div></div>
+          <div class="rank-row"><div class="rank-num">3</div><div class="rank-name">Remco Evenepoel</div><div class="rank-detail">Soudal — Outsider sérieux</div></div>
+        </div>
+        <div class="tip-box"><div class="tip-title">🇫🇷 À suivre</div><p>Le Tour passera par la Bretagne cette année — une occasion pour les fans locaux de voir les plus grands champions en direct !</p></div>
+      </div>
+    </main>
+    <aside><div class="pub-side"><span>Google AdSense</span><div class="pub-side-inner"><div style="font-size:1.5rem">📢</div><div>160×600</div><div>Skyscraper</div></div></div></aside>
+  </div>
+</div>
+
+<div class="article-page" id="page-tennis">
+  <div class="back-btn" onclick="goBack()">← Retour aux articles</div>
+  <div class="article-wrapper">
+    <main>
+      <div class="tag">🎾 Tennis</div>
+      <h1 class="article-title">Roland-Garros 2025 : retour sur le tournoi le plus imprévisible</h1>
+      <p class="article-intro">L'édition 2025 de Roland-Garros a livré son lot de rebondissements. Entre chutes de têtes de série et jeunes talents qui émergent, la terre battue parisienne n'a pas déçu.</p>
+      <div class="article-meta"><div class="author-dot">H</div><span>Par <strong style="color:#ccc">Hippolyte</strong></span><span>·</span><span>5 juin 2025</span><span>·</span><span>4 min</span></div>
+      <div class="hero-img-article tennis">🎾🏆</div>
+      <div class="pub-slot"><span>Google AdSense — 728×90</span>Bannière publicitaire</div>
+      <div class="content">
+        <p>Chaque année, Roland-Garros confirme son statut de tournoi du Grand Chelem le plus imprévisible. La terre battue est une surface qui efface les certitudes et remet les compteurs à zéro.</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">128</div><div class="stat-label">Joueurs au tableau</div></div>
+          <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Têtes de série éliminées</div></div>
+          <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Semaines de compétition</div></div>
+        </div>
+        <h2>Côté hommes</h2>
+        <p>Carlos Alcaraz a confirmé son statut de maître de la terre battue en s'imposant avec autorité. L'Espagnol a livré une finale de haute volée contre Jannik Sinner, s'imposant en 4 sets après un match de plus de 4 heures. <strong>Novak Djokovic</strong>, à 38 ans, a lui aussi atteint les demi-finales, prouvant une longévité exceptionnelle.</p>
+        <div class="pub-slot"><span>Google AdSense — 336×280</span>Rectangle moyen</div>
+        <h2>Côté femmes</h2>
+        <p>Iga Swiatek a de nouveau dominé le tableau féminin avec une régularité impressionnante. La Polonaise, quadruple lauréate du tournoi, n'a perdu aucun set en route vers sa cinquième couronne parisienne. Une domination qui rappelle Rafael Nadal dans les années 2000.</p>
+        <h2>Les résultats</h2>
+        <div class="ranking">
+          <div class="rank-row"><div class="rank-num">🏆</div><div class="rank-name">Carlos Alcaraz</div><div class="rank-detail">Hommes — Vainqueur</div></div>
+          <div class="rank-row"><div class="rank-num">🥈</div><div class="rank-name">Jannik Sinner</div><div class="rank-detail">Hommes — Finaliste</div></div>
+          <div class="rank-row"><div class="rank-num">🏆</div><div class="rank-name">Iga Swiatek</div><div class="rank-detail">Femmes — Vainqueure</div></div>
+        </div>
+        <div class="tip-box"><div class="tip-title">🇫🇷 Les Français</div><p>Ugo Humbert a atteint les quarts de finale, meilleur résultat tricolore depuis des années. Un signe que le tennis français se relève enfin.</p></div>
+      </div>
+    </main>
+    <aside><div class="pub-side"><span>Google AdSense</span><div class="pub-side-inner"><div style="font-size:1.5rem">📢</div><div>160×600</div><div>Skyscraper</div></div></div></aside>
+  </div>
+</div>
+
+<div class="article-page" id="page-rugby">
+  <div class="back-btn" onclick="goBack()">← Retour aux articles</div>
+  <div class="article-wrapper">
+    <main>
+      <div class="tag">🏉 Rugby</div>
+      <h1 class="article-title">Top 14 : qui va soulever le Brennus cette saison ?</h1>
+      <p class="article-intro">La saison 2024-2025 du Top 14 approche de son dénouement. Toulouse, Leinster invité surprise, Bordeaux-Bègles... les prétendants au bouclier de Brennus sont nombreux.</p>
+      <div class="article-meta"><div class="author-dot">H</div><span>Par <strong style="color:#ccc">Hippolyte</strong></span><span>·</span><span>4 juin 2025</span><span>·</span><span>4 min</span></div>
+      <div class="hero-img-article rugby">🏉🛡️</div>
+      <div class="pub-slot"><span>Google AdSense — 728×90</span>Bannière publicitaire</div>
+      <div class="content">
+        <p>Le Top 14, championnat de rugby le plus relevé au monde, tient toutes ses promesses en 2025. La saison régulière a été marquée par une densité exceptionnelle au classement, avec six équipes capables de remporter le titre.</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">14</div><div class="stat-label">Clubs en compétition</div></div>
+          <div class="stat-card"><div class="stat-num">26</div><div class="stat-num" style="font-size:1rem"></div><div class="stat-label">Journées de championnat</div></div>
+          <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Équipes en playoffs</div></div>
+        </div>
+        <h2>Toulouse, éternel favori</h2>
+        <p>Le Stade Toulousain reste la référence absolue du rugby français. Champion d'Europe en titre, le club à la croix occitane réunit le meilleur effectif de la compétition avec des joueurs comme Antoine Dupont, véritable extraterrestre qui fait la différence à chaque match.</p>
+        <div class="pub-slot"><span>Google AdSense — 336×280</span>Rectangle moyen</div>
+        <h2>Bordeaux-Bègles, la vraie menace</h2>
+        <p>L'Union Bordeaux-Bègles monte en puissance depuis plusieurs saisons. Avec Matthieu Jalibert aux commandes et un jeu offensif spectaculaire, le club girondin a les armes pour aller chercher un premier Brennus de son histoire. <strong>La finale à Paris sera explosive.</strong></p>
+        <h2>Notre pronostic playoffs</h2>
+        <div class="ranking">
+          <div class="rank-row"><div class="rank-num">1</div><div class="rank-name">Stade Toulousain</div><div class="rank-detail">Grand favori — Dupont au top</div></div>
+          <div class="rank-row"><div class="rank-num">2</div><div class="rank-name">Bordeaux-Bègles</div><div class="rank-detail">Finaliste probable</div></div>
+          <div class="rank-row"><div class="rank-num">3</div><div class="rank-name">Stade Rochelais</div><div class="rank-detail">Outsider dangereux</div></div>
+          <div class="rank-row"><div class="rank-num">4</div><div class="rank-name">Castres Olympique</div><div class="rank-detail">Surprise de la saison</div></div>
+        </div>
+        <div class="tip-box"><div class="tip-title">🏟️ La finale</div><p>La finale du Top 14 se jouera au Stade de France le 28 juin 2025. Un événement à ne pas manquer pour tout fan de rugby !</p></div>
+      </div>
+    </main>
+    <aside><div class="pub-side"><span>Google AdSense</span><div class="pub-side-inner"><div style="font-size:1.5rem">📢</div><div>160×600</div><div>Skyscraper</div></div></div></aside>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 MonBlog — Tous droits réservés · <a href="#" style="color:#555">Mentions légales</a> · <a href="#" style="color:#555">Contact</a></p>
+</footer>
+
+<script>
+function showArticle(id){
+  document.getElementById('index-page').style.display='none';
+  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+id).style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goBack(){
+  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
+  document.getElementById('index-page').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
